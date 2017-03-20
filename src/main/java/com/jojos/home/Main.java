@@ -1,6 +1,6 @@
 package com.jojos.home;
 
-import com.jojos.home.files.File;
+import com.jojos.home.files.File4Fun;
 
 /**
  * todo: create javadoc
@@ -10,6 +10,6 @@ import com.jojos.home.files.File;
 public class Main {
 
     public static void main(String[] args) {
-        File.demonstrate();
+        File4Fun.demonstrate();
     }
 }
