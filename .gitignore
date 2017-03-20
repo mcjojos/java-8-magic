@@ -12,4 +12,7 @@ target/
 # Sensitive or high-churn files:
 .idea/**/uiDesigner.xml
 
+.idea
+
+*.iml
 
