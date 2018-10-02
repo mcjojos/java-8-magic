@@ -54,6 +54,9 @@ public class File4Fun {
     }
 
     /**
+     *
+     * Listing the contents of a resource directory
+     *
      * Special thanks to Greg Briggs as seen under
      * @see <a href="http://www.uofr.net/~greg/java/get-resource-listing.html">Greg's source code</a>
      *
