@@ -7,6 +7,7 @@ import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Objects;
@@ -43,6 +44,16 @@ public class File4Fun {
     }
 
     /**
+     * Split comma separated strings into a Set.
+     *
+     * @param str a string with comma separated values
+     * @return a set of strings containing the comma-separated values of the input argument
+     */
+    public static Set<String> setOfCommaSeparatedValues(String str) {
+        return new HashSet<>(Arrays.asList(str.split("\\s*,\\s*")));
+    }
+
+    /**
      * Special thanks to Greg Briggs as seen under
      * @see <a href="http://www.uofr.net/~greg/java/get-resource-listing.html">Greg's source code</a>
      *
@@ -56,7 +67,7 @@ public class File4Fun {
      * @throws URISyntaxException if this URL is not formatted strictly according to to RFC2396 and cannot be converted to a URI.
      * @throws IOException If character encoding needs to be consulted, but named character encoding is not supported
      */
-    public String[] getResourceListing(Class clazz, String path) throws URISyntaxException, IOException {
+    public static String[] getResourceListing(Class clazz, String path) throws URISyntaxException, IOException {
         URL dirURL = clazz.getClassLoader().getResource(path);
 
         if (Objects.nonNull(dirURL) && dirURL.getProtocol().equals("file")) {
