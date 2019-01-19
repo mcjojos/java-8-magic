@@ -114,6 +114,31 @@ public class CollectorsUtil {
         return existingSet.remove(value);
     }
 
+    public static <OK, IK, V> V removeFromContainedMap(ConcurrentMap<OK, Map<IK, V>> map, OK outerMapKey, IK innerMapKey, V value) {
+        Map<IK, V> existingMap = map.get(outerMapKey);
+        if (existingMap == null) {
+            // It might look like checking for null and then creating something means that we need a lock.
+            // this isn't the case, as the ACTUAL point of synchronization is the map.putIfAbsent() below.
+            // it's perfectly possible to have multiple threads enter this block at the same time.
+            // this is fine, as the only "true" value added is added by the putIfAbsent() call.
+            // this race will only be an issue in the beginning. Once putIfAbsent() has succeeded,
+            // the outer if-statement will always be false, which means we can avoid creating the
+            // inner container and calling putIfAbsent() again.
+            // This replaces this more legible but slower pattern:
+            // map.putIfAbsent(outerMapKey, new ConcurrentHashMap<IK, V>()); // ensure that we have something
+            // map.get(outerMapKey).put(innerMapKey, value);
+            // See slides 54 and 55 of this presentation regarding the speed of this: http://www.slideshare.net/marakana/effective-java-still-effective-after-all-these-years
+            ConcurrentHashMap<IK, V> newMap = new ConcurrentHashMap<>();
+            existingMap = map.putIfAbsent(outerMapKey, newMap);
+            if (existingMap == null) {
+                // we've added a new set
+                existingMap = newMap;
+            }
+        }
+        return existingMap.remove(innerMapKey);
+    }
+
+
     /**
      * Creates a comma-separated list of values.
      *
